@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap");
+.loginScreen {
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  background: #eee;
+  background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+
+  .leftSide {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    align-items: center;
+    height: 62vh;
+    background-color: #034f84;
+    span {
+      margin-top: 6rem;
+      margin-bottom: 1rem;
+      font-size: 14px;
+      color: hsl(0, 0%, 100%);
+      text-transform: uppercase;
+    }
+    img {
+      height: 120px;
+      width: 150px;
+    }
+    .text {
+      margin-top: 2.2rem;
+      padding: 0 1.5rem;
+    }
+    .bottom {
+      text-align: center;
+    }
+  }
+  .rightSide {
+    font-family: "Montserrat", sans-serif;
+    width: 40%;
+    height: 62vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .header {
+      margin-top: 2rem;
+      font-weight: 500;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #4596d9;
+      text-transform: uppercase;
+    }
+    .login-options {
+      justify-content: center;
+      column-gap: 0.7rem;
+      margin-top: 2rem;
+      .facebook,
+      .google {
+        column-gap: 0.3rem;
+        border-radius: 5px;
+        display: flex;
+        padding: 0.8rem 0.3rem;
+        color: hsl(240, 4%, 36%);
+        background-color: #f0ece2;
+        align-items: center;
+        cursor: pointer;
+        .icon {
+          font-size: 1.5rem;
+          color: #3b5998;
+        }
+        h2 {
+          font-weight: 400;
+          font-size: 0.9rem;
+        }
+      }
+      .google {
+        padding-right: 0.8rem;
+        .icon {
+          font-size: 1.5rem;
+          color: #3b5998;
+        }
+        h2 {
+          font-weight: 400;
+          font-size: 0.9rem;
+        }
+      }
+    }
+    .alt {
+      margin-top: 3rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #4596d9;
+    }
+    .input-field {
+      display: flex;
+      flex-direction: column;
+      row-gap: 1rem;
+      span {
+        display: flex;
+        align-self: flex-end;
+        cursor: pointer;
+        color: #4596d9;
+        font-size: 12px;
+      }
+      input {
+        border-radius: 5px;
+        padding: 0.8rem;
+        background-color: #f0ece2;
+        outline: none;
+        border: none;
+        width: 100%;
+      }
+      ::placeholder {
+        color: hsl(240, 4%, 36%);
+      }
+      .btn {
+        align-items: center;
+        justify-content: center;
+        margin: 50%;
+        transform: translate(-50%);
+        margin-top: 1rem;
+        width: 140px;
+        padding: 1rem 2.5rem;
+        border-radius: 20px;
+        font-size: 18px;
+        background-color: #034f84;
+        color: rgb(252, 250, 250);
+        &:hover {
+          background-color: indigo;
+        }
+      }
+    }
+  }
+}
