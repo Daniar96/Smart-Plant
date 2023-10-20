@@ -1,0 +1,57 @@
+.menu {
+  flex-direction: column;
+  height: 100%;
+  row-gap: 0.5rem;
+  span {
+    font-size: 1.3rem;
+    color: #4596d9;
+  }
+
+  .custom:not(:last-child) {
+    cursor: pointer;
+  }
+
+  .custom {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1.5rem;
+    background-color: rgba(250, 247, 247, 0.3);
+    &:not(:last-child):hover {
+      color: indigo;
+      transform: scale(1.05);
+      will-change: transform;
+      span {
+        color: indigo;
+      }
+      :hover {
+        color: indigo;
+        transform: scale(1.05);
+        will-change: transform;
+      }
+    }
+    .iconContainer {
+      column-gap: 0.7rem;
+      padding: 0 15px;
+    }
+  }
+
+  #logout {
+    margin-top: auto;
+    padding-bottom: 2rem;
+    .iconContainer {
+      width: 100%;
+      padding: 12px 15px;
+      cursor: pointer;
+      &:hover {
+        color: red;
+        transform: scale(1.05);
+        will-change: transform;
+        span {
+          color: red;
+          transform: scale(1.05);
+          will-change: transform;
+        }
+      }
+    }
+  }
+}

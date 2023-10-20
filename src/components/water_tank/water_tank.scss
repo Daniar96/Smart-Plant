@@ -1,0 +1,133 @@
+.WaterTank {
+  background-color: #f9f9f9;
+  border-radius: 0 0 5px 5px;
+  .head {
+    font-size: 0.7rem;
+    color: #c24d2c !important;
+    margin-bottom: 0.3rem;
+  }
+  .wateringSection {
+    display: flex;
+    flex-direction: row;
+    gap: 0.8rem;
+    .btn {
+      width: 30%;
+      display: flex;
+      align-items: center;
+      margin-top: 0.4rem;
+      button {
+        width: 100%;
+        border-radius: 25px;
+        background-color: #24527a;
+        font-size: 0.8rem;
+        padding: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        color: whitesmoke;
+        outline: none;
+        margin-right: 0.3rem;
+        border: none;
+        &:hover {
+          background-color: #2772db;
+        }
+      }
+    }
+    .WaterSelect {
+      width: 22%;
+      margin: 0.5rem 0 0 0rem;
+      position: relative;
+      border-radius: 5px;
+      padding: 0.4rem;
+      overflow: hidden;
+      background-color: rgba(155, 166, 165, 0.5);
+      select {
+        -webkit-appearance: initial;
+        background-color: rgba(155, 166, 165, 0.01);
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-right: 0.4rem;
+        color: #222831;
+        outline: none;
+        border: none;
+      }
+      .select-icon {
+        position: absolute;
+        top: 50%;
+        right: -0.15rem;
+        font-size: 15px;
+        transform: translateY(-50%);
+      }
+    }
+    .WaterInput {
+      width: 36%;
+      margin: 0.5rem 0 0 0.5rem;
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input {
+        border-radius: 5px;
+        padding: 0 0.5rem 0.5rem;
+        padding-top: 0.4rem;
+        background-color: rgba(155, 166, 165, 0.5);
+        outline: none;
+        border: none;
+        width: 100%;
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
+      ::placeholder {
+        align-items: center;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #222831;
+      }
+    }
+  }
+  .tankContainer {
+    position: relative;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    margin-top: 1.1rem;
+    .vertical-progress {
+      transform: rotate(-90deg);
+    }
+    h2 {
+      margin-left: 0.3rem;
+      color: #142d4c;
+      font-size: 2.5rem;
+    }
+    .percentage {
+      position: relative;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #142d4c;
+      margin-left: 0.2rem;
+      top: -10px;
+    }
+  }
+  h4 {
+    margin-top: 0.2rem;
+    font-weight: 500;
+    color: #142d4c;
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .WaterTank {
+    .tankContainer {
+      margin-top: 1.8rem;
+    }
+    .wateringSection {
+      .WaterSelect {
+        .select-icon {
+          right: -0.05rem;
+        }
+      }
+    }
+  }
+}

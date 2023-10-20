@@ -1,0 +1,39 @@
+.measurement {
+  flex-direction: column;
+  border-radius: 5px;
+  padding-top: 1rem;
+  background-color: #f9f9f9;
+  h3 {
+    font-size: 1.2rem;
+    color: #142d4c;
+    font-weight: 400;
+  }
+  .circleSize {
+    width: 40%;
+    height: 40%;
+    padding-top: 0.7rem;
+  }
+}
+
+@media screen and (max-width: 814px) {
+  .measurement {
+    h3 {
+      font-size: 0.9rem;
+    }
+    .circleSize {
+      width: 60%;
+      height: 60%;
+      padding-top: 0.9rem;
+    }
+  }
+}
+@media screen and (min-width: 1400px) {
+  .measurement {
+    h3 {
+      font-size: 1.3rem;
+    }
+    .circleSize {
+      padding-top: 1.2rem;
+    }
+  }
+}
