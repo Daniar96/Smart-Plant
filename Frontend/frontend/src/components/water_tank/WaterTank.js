@@ -3,7 +3,7 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { FiChevronDown } from "react-icons/fi";
 import "./water_tank.scss";
 
-const WaterTank = (props) => {
+const WaterTank = () => {
   return (
     <div data-aos="fade-left" className="WaterTank">
       <h4 className="head">Last watered 30 mins ago</h4>
@@ -32,11 +32,11 @@ const WaterTank = (props) => {
           isLabelVisible={false}
           width="43px"
           labelSize="8px"
-          completed={props.waterLevel}
+          completed="45"
           bgColor="#1ca3ec"
           className="vertical-progress"
         />
-        <h2>{props.waterLevel}</h2>
+        <h2>45</h2>
         <div className="percentage">%</div>
       </div>
       <h4>Water Tank</h4>

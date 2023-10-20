@@ -5,7 +5,12 @@
   justify-content: center;
   background: #eee;
   background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
-
+  .login_failed {
+    position: absolute;
+    font-size: 0.8rem;
+    color: #cd4439;
+    top: 3rem;
+  }
   .leftSide {
     display: flex;
     flex-direction: column;

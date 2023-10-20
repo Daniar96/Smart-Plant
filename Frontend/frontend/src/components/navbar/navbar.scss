@@ -7,10 +7,11 @@
     color: rgb(45, 215, 45);
     column-gap: 3px;
     cursor: pointer;
-  }
-  span {
-    color: var(---whiteColor);
-    font-size: 2rem;
+
+    span {
+      color: var(---whiteColor);
+      font-size: 2rem;
+    }
   }
   .flex {
     align-items: center;
@@ -33,6 +34,9 @@
       right: -0.5rem;
       top: -1.2rem;
     }
+    &.zero-count::after {
+      display: none;
+    }
   }
   .user {
     column-gap: 0.7rem;
@@ -52,12 +56,154 @@
     cursor: pointer;
   }
 
-  .user, .headerIcon,
+  .user,
+  .headerIcon,
   .notifications {
     &:hover {
       color: #d9dad7;
       transform: scale(1.05);
       will-change: transform;
+    }
+  }
+  .app-options {
+    background-color: #fff;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    max-width: 25%;
+    width: 100%;
+    padding: 16px 24px;
+    right: 0;
+    top: 0;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    z-index: 1;
+    animation: fadeInAnimation ease-in-out 0.45s forwards;
+    .app-options-headline {
+      margin-top: 1.6rem;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: space-between;
+      h2 {
+        color: #142d4c;
+        font-size: 1.5rem;
+      }
+      .closeIcon {
+        font-size: 1.5rem;
+        color: #04736d;
+        cursor: pointer;
+      }
+    }
+    .app-options-contents {
+      margin-top: 2rem;
+      .plant {
+        h3 {
+          font-weight: 500;
+          color: #142d4c;
+          margin: 0.5rem 0 1.5rem 0.5rem;
+        }
+        #plant {
+          margin-bottom: 1.6rem;
+          cursor: pointer;
+          border-radius: 5px;
+          background-color: #385170;
+          &:hover {
+            background-color: #135db7;
+          }
+          .img {
+            padding: 0.5rem;
+            img {
+              background-color: #e3e3e3;
+              object-fit: cover;
+              border-radius: 5px;
+              border: 1px solid #e3e3e3;
+              width: 16%;
+              height: 16%;
+            }
+            .text {
+              justify-content: center;
+              align-items: flex-start;
+              flex-direction: column;
+              padding-left: 0.8rem;
+              h4 {
+                font-size: 0.9rem;
+                font-weight: 500;
+                color: white;
+                padding-bottom: 0.4rem;
+              }
+              h5 {
+                font-size: 0.6rem;
+                color: #f4f2f2;
+                font-weight: 400;
+              }
+            }
+            .size {
+              margin-left: auto;
+              width: 20%;
+              height: 20%;
+            }
+          }
+        }
+      }
+    }
+  }
+  .none {
+    display: none;
+  }
+  .hide {
+    opacity: 0;
+    visibility: hidden;
+    animation: fadeOutAnimation ease-in-out 0.5s forwards;
+  }
+
+  #line1 {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    margin-top: 4.5rem;
+    border: 1px solid #ececec;
+  }
+  #line2 {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    margin-top: 6.9rem;
+    border: 1px solid #ececec;
+  }
+
+  #clear-button {
+    position: absolute;
+    margin-top: 5.1rem;
+    color: #04736d;
+    font-weight: 500;
+    cursor: pointer;
+    padding-right: 1.9rem;
+    right: 0;
+  }
+
+  @keyframes fadeInAnimation {
+    0% {
+      opacity: 0;
+      visibility: hidden;
+      width: 0;
+    }
+    100% {
+      opacity: 1;
+      visibility: visible;
+      width: 25%;
+    }
+  }
+  @keyframes fadeOutAnimation {
+    0% {
+      opacity: 1;
+      visibility: visible;
+      width: 25%;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+      width: 0;
     }
   }
 }

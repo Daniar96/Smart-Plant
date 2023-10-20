@@ -11,13 +11,11 @@ function Dashboard() {
     light: 15,
     temperature: 21,
   });
-  const [waterLevel, setWaterLevel] = useState(45);
-  const [plantInfo, setplantInfo] = useState({name: "Sunflower", age: 8, growth: 48});
 
   return (
     <div className="dashboard">
-      <MyPlant name={plantInfo.name} age={plantInfo.age} growth={plantInfo.growth}/>
-      <WaterTank waterLevel={waterLevel}/>
+      <MyPlant />
+      <WaterTank />
       <ChartComponent />
       <SensorReading
         title="Soil Moisture"

@@ -3,7 +3,7 @@
   border-radius: 0 0 5px 5px;
   .head {
     font-size: 0.7rem;
-    color: #c24d2c !important;
+    color: #f4991a !important;
     margin-bottom: 0.3rem;
   }
   .wateringSection {
@@ -17,7 +17,7 @@
       margin-top: 0.4rem;
       button {
         width: 100%;
-        border-radius: 25px;
+        border-radius: 10px;
         background-color: #24527a;
         font-size: 0.8rem;
         padding: 0.5rem;
@@ -43,18 +43,19 @@
       select {
         -webkit-appearance: initial;
         background-color: rgba(155, 166, 165, 0.01);
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 500;
         margin-right: 0.4rem;
-        color: #222831;
+        color: rgba(34, 40, 49, 0.7);
         outline: none;
         border: none;
       }
       .select-icon {
         position: absolute;
         top: 50%;
-        right: -0.15rem;
+        color: rgba(34, 40, 49, 0.7);
         font-size: 15px;
+        right: 0;
         transform: translateY(-50%);
       }
     }
@@ -80,9 +81,9 @@
       }
       ::placeholder {
         align-items: center;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 500;
-        color: #222831;
+        color: rgba(34, 40, 49, 0.7);
       }
     }
   }
@@ -121,13 +122,6 @@
   .WaterTank {
     .tankContainer {
       margin-top: 1.8rem;
-    }
-    .wateringSection {
-      .WaterSelect {
-        .select-icon {
-          right: -0.05rem;
-        }
-      }
     }
   }
 }

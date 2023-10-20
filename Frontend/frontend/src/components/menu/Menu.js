@@ -8,6 +8,7 @@ import { GrAddCircle } from "react-icons/gr";
 import { BiLogOutCircle } from "react-icons/bi";
 function Menu() {
   const navigate = useNavigate();
+
   return (
     <div className="menu flex">
       <div className="flex custom">
@@ -41,7 +42,7 @@ function Menu() {
       <div id="logout" className="flex custom">
         <div
           onClick={() => {
-            navigate("/login");
+            navigate("/");
           }}
           className="iconContainer flex"
         >

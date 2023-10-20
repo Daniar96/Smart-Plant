@@ -3,13 +3,15 @@ import { AiFillFacebook } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import "./login.scss";
+import { useUserContext } from "../../components/context/UserContext";
 import axios from "../../api/Axios";
 import Typewriter from "typewriter-effect";
-import logo from "../../img/logohome.png";
 
 const Login = () => {
   const navigate = useNavigate();
   const [loginInfo, setLoginInfo] = useState({ userName: "", password: "" });
+  const [error, setError] = useState(null);
+  const { setUserName } = useUserContext();
   const [success, setSuccess] = useState(false);
 
   const recordData = (event) => {
@@ -22,13 +24,14 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setSuccess(true);
     try {
       const response = await axios.get("/api/user");
-      setLoginInfo({ userName: "", password: "" });
       console.log(response.data);
-      setSuccess(true)
+      setUserName("Kazi00");
     } catch (err) {
-      console.error("Error:", err);
+      setError("Login failed with status code: 401");
+      setTimeout(() => setError(null), 5000);
     }
   };
 
@@ -40,9 +43,12 @@ const Login = () => {
 
   return (
     <section className="loginScreen flex">
+      <div className="login_failed">
+        <h1>{error}</h1>
+      </div>
       <div className="leftSide">
         <span>Welcome To</span>
-        <img src={logo} alt=""/>
+        <img src={"/assets/img/logohome.png"} alt="" />
         <div className="text">
           <span className="bottom" style={{ lineHeight: "2.5" }}>
             <Typewriter
