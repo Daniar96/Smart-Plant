@@ -4,6 +4,8 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/Frontend/frontend/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/Frontend/frontend/.idea/inspectionProfiles" />
+      <excludeFolder url="file://$MODULE_DIR$/Frontend/frontend/.idea/sonarlint" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
