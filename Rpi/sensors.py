@@ -58,14 +58,74 @@ def calculateTemp():
     return temperature - 273.15
 
 
-while True:
-    print ("channel 0:", "{:> 5} \ t {:> 5.3f}". format (chan0.value, chan0.voltage))
-    print("Light level: ")
-    print(calculateLight())
-    print ("channel 1:", "{:> 5} \ t {:> 5.3f}". format (chan1.value, chan1.voltage))
-    print("Moisture level: ")
-    print(calculateHumid())
-    print ("channel 2:", "{:> 5} \ t {:> 5.3f}". format (chan2.value, chan2.voltage))
-    print("Temperature: ",'%.2f' %  calculateTemp(),"degC")
-    print("---------------------------------------------------")
-    time.sleep(1)
+# while True:
+#     print ("channel 0:", "{:> 5} \ t {:> 5.3f}". format (chan0.value, chan0.voltage))
+#     print("Light level: ")
+#     print(calculateLight())
+#     print ("channel 1:", "{:> 5} \ t {:> 5.3f}". format (chan1.value, chan1.voltage))
+#     print("Moisture level: ")
+#     print(calculateHumid())
+#     print ("channel 2:", "{:> 5} \ t {:> 5.3f}". format (chan2.value, chan2.voltage))
+#     print("Temperature: ",'%.2f' %  calculateTemp(),"degC")
+#     print("---------------------------------------------------")
+#     time.sleep(1)
+
+import time
+import requests
+import path
+
+
+def getPlantID():
+    request_url = path.URL + "getPlant"
+    headers = {
+        "Content-Type": "application/json"
+    }
+
+    try:
+        r = requests.get(url=request_url, cookies=path.credentials, headers=headers, verify=False)
+        response = r.json()
+        print(response)
+        return response
+    except Exception as e:
+        print(e)
+
+
+def send_measurements(plant_id):
+    # while True:
+    temperature = calculateTemp()
+    humidity = calculateHumid()
+    uv_measurement = calculateLight()
+    # water_tank = 75.1234
+
+    t = f"{temperature:.2f}"
+    h = f"{humidity:.2f}"
+    uv = f"{uv_measurement:.2f}"
+    # water = f"{water_tank:.2f}"
+
+    print(f"Humidity= {t}%")
+    print(f"Temperature= {h}°C")
+    print(f"UV= {uv}°%")
+    # print(f"Water level= {water}°%")
+
+    # data = {"temperature": t, "humidity": h, "uv": uv, "water_tank": water_tank}
+    data = {"humidity": h, "uv": uv, "temp": t}
+
+    headers = {
+        "Content-Type": "application/json"
+    }
+
+    request_url = path.URL + plant_id
+    try:
+        r = requests.post(url=request_url, headers=headers, json=data, cookies=path.credentials, verify=False)
+        response = r.status_code
+        print(response)
+    except Exception as e:
+        print(e)
+    time.sleep(20)
+
+
+if __name__ == "__main__":
+    plant_id = getPlantID()
+    send_measurements(plant_id)
+
+
