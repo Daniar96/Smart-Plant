@@ -2,21 +2,18 @@ import threading
 import http.server
 import http.server
 import socketserver
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time
-import path
+from Rpi.constants import path
+from Rpi.constants.pin_assignment import valve_output_pin, water_level_input_pin
 import json
 
-# Constants
-
-valve_output_pin = 17
-max_watering_duration = 15
+max_watering_duration = 20
 
 
 class MyHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        # default_watering_duration = 10
-
+        
         try:
             content_length = int(self.headers['Content-Length'])
             # if content_length < 8:
@@ -36,6 +33,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
             return
         except:
             self.send_response(400)
+            self.end_headers()
             return
 
     def do_POST(self):
@@ -47,30 +45,43 @@ def run_http_client():
     # with socketserver.TCPServer(("", path.PORT), MyHandler) as httpd:
     #     print("serving at port", path.PORT)
     #     httpd.serve_forever()
-    with socketserver.TCPServer(("localhost", path.PORT), MyHandler) as httpd:
+    # with socketserver.TCPServer(("localhost", path.PORT), MyHandler) as httpd:
+    with socketserver.TCPServer((path.pi_public_ip, path.PORT), MyHandler) as httpd:
         print("serving at port", path.PORT)
         print(httpd.server_address, httpd)
         httpd.serve_forever()
 
 
 def release_water(seconds):
-    print("releasing water for" + str(seconds))
-    pass
-    # GPIO.output(valve_output_pin, GPIO.HIGH)
-    # time.sleep(seconds)
-    # GPIO.output(valve_output_pin, GPIO.LOW)
+    GPIO.output(valve_output_pin, GPIO.HIGH)
+    time.sleep(seconds)
+    GPIO.output(valve_output_pin, GPIO.LOW)
+    return
 
 
 def setup_sensors():
-    pass
-    # GPIO.setmode(GPIO.BCM)
-    # GPIO.setup(valve_output_pin, GPIO.OUT)
+# Set the GPIO mode
+    GPIO.setmode(GPIO.BCM)
+
+    # Set the GPIO pin
+
+    GPIO.setup(water_level_input_pin, GPIO.OUT)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(valve_output_pin, GPIO.OUT)
 
 
 def run_sensors():
     while True:
-        time.sleep(10)
-        print("sensors running")
+        # Read the sensor value
+        sensor_value = GPIO.input(water_level_input_pin)
+
+        # Print the sensor value
+        print("Sensor value:", sensor_value)
+
+        # You can add your logic here based on the sensor value
+        # For instance, you might want to check if the water level is above or below a certain threshold
+
+        time.sleep(1)  # Wait for a second before reading the sensor again
 
 
 if __name__ == '__main__':
