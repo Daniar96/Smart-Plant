@@ -14,15 +14,10 @@ import json
 
 from Rpi.constants import path
 from Rpi.constants.pin_assignment import valve_output_pin, water_level_input_pin
+from Rpi.constants.properties import *
 
-# Constants
-max_watering_duration = 20
-# Min and max constants used for calibration of the humidity sensor after measuring different circumstances.
-min_voltage_const_light = 0.004  # When the sensor is held against a flashlight, this number is maximum I measured
-max_voltage_const_light = 3.3  # When the sensor is held in deep dark, in a hand, in a dark room, this number is the maximum I measured
-# Min and max constants used for calibration of the humidity sensor after measuring different circumstances.
-min_voltage_const_humid = 0.955  # When the sensor is held in water, this number is the average
-max_voltage_const_humid = 2.505  # When the sensor is held in the air, this number is the average
+water_lock = threading.Lock()
+current_water_level = 0
 
 
 def calculateLight(channel):
@@ -54,14 +49,33 @@ def calculateTemp(channel):
 
 
 def calculateWater():
+    global current_water_level
     sensor_value = GPIO.input(water_level_input_pin)
-    return sensor_value
+    print(f"Water level sensor outputs:{sensor_value}")
+    print(f"Current water level: {current_water_level}")
+
+    water_lock.acquire()
+    if sensor_value == 1:
+        current_water_level = max_water_level
+        water_percentage = 100
+    else:
+        water_percentage = (current_water_level / max_water_level) * 100
+
+    water_lock.release()
+    return water_percentage
 
 
 def release_water(seconds):
+    global current_water_level
+    water_lock.acquire()
+    print(f"current_water_level changed from {current_water_level} to :")
+    current_water_level = max(0, current_water_level - (seconds * water_released_per_second))
+    print(current_water_level)
+    water_lock.release()
     GPIO.output(valve_output_pin, GPIO.HIGH)
     sleep(seconds)
     GPIO.output(valve_output_pin, GPIO.LOW)
+
     return
 
 
@@ -157,6 +171,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
 
 
 def run_http_client():
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer((path.pi_public_ip, path.PORT), MyHandler) as httpd:
         print("serving at port", path.PORT)
         print(httpd.server_address, httpd)
@@ -164,15 +179,18 @@ def run_http_client():
 
 
 if __name__ == "__main__":
-    try:
-        plant_id = getPlantID()
-        temp_chan, humid_chan, light_chan = setup_sensors()
 
-        # Start the HTTP client in a separate thread
-        http_thread = threading.Thread(target=run_http_client)
+    plant_id = getPlantID()
+    temp_chan, humid_chan, light_chan = setup_sensors()
+
+    # Start the HTTP client in a separate thread
+    http_thread = threading.Thread(target=run_http_client)
+    try:
         send_measurements(plant_id, temp_chan, humid_chan, light_chan)
         http_thread.start()
         http_thread.join()
-
-    except KeyboardInterrupt:
+        GPIO.cleanup()
+    finally:
         GPIO.cleanup()  # Clean up
+        water_lock.release()
+        http_thread.join(timeout=1)
