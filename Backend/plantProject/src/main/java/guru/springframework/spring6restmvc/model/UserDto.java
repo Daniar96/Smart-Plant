@@ -27,12 +27,17 @@ public class UserDto {
 
     private Boolean admin;
 
+    private String fullName;
+
     @CreationTimestamp
     private LocalDateTime createDate;
 
     private Set<Plant> plants;
 
+
     public void removePlants(){
         this.plants = null;
     }
+
+
 }

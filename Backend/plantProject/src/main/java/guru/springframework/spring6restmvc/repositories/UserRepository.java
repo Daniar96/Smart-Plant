@@ -9,4 +9,5 @@ import java.util.UUID;
  * Created by jt, Spring Framework Guru.
  */
 public interface UserRepository extends JpaRepository<User, UUID> {
+    User findByUsername(String username);
 }

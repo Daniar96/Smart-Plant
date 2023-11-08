@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-10-16T14:33:22+0200",
+    date = "2023-11-07T14:23:10+0100",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.7 (Oracle Corporation)"
 )
 @Component
@@ -26,6 +26,8 @@ public class MeasurementMapperImpl implements MeasurementMapper {
         measurement.temp( measurementDto.getTemp() );
         measurement.humidity( measurementDto.getHumidity() );
         measurement.uv( measurementDto.getUv() );
+        measurement.water( measurementDto.getWater() );
+        measurement.plant( measurementDto.getPlant() );
 
         return measurement.build();
     }
@@ -43,6 +45,8 @@ public class MeasurementMapperImpl implements MeasurementMapper {
         measurementDto.temp( measurement.getTemp() );
         measurementDto.humidity( measurement.getHumidity() );
         measurementDto.uv( measurement.getUv() );
+        measurementDto.plant( measurement.getPlant() );
+        measurementDto.water( measurement.getWater() );
 
         return measurementDto.build();
     }

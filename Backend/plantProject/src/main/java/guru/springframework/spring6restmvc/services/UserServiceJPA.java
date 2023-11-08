@@ -1,12 +1,11 @@
 package guru.springframework.spring6restmvc.services;
 
-import guru.springframework.spring6restmvc.entities.Plant;
-import guru.springframework.spring6restmvc.entities.User;
 import guru.springframework.spring6restmvc.mappers.UserMapper;
 import guru.springframework.spring6restmvc.model.UserDto;
 import guru.springframework.spring6restmvc.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -29,8 +28,15 @@ public class UserServiceJPA implements UserService {
 
     @Override
     public Optional<UserDto> getUserById(UUID uuid) {
-        return Optional.ofNullable(UserMapper
-                .UserToUserDto(UserRepository.findById(uuid).orElse(null)));
+        UserDto userDto = UserMapper
+                .UserToUserDto(UserRepository.findById(uuid).orElse(null));
+
+       if (userDto != null){
+           userDto.setPlants(new HashSet<>());
+
+           return Optional.ofNullable(userDto);
+       }
+       return Optional.empty();
     }
 
     @Override
@@ -42,15 +48,16 @@ public class UserServiceJPA implements UserService {
                     return userDto;
                 })
                 .collect(Collectors.toList());
-
-
-
     }
 
     @Override
-    public UserDto saveNewUser(UserDto User) {
+    public UserDto saveNewUser(UserDto user) {
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        String encryptPassw = bcrypt.encode(user.getHashedpassword());
+        user.setHashedpassword(encryptPassw);
+
         return UserMapper.UserToUserDto(UserRepository
-                .save(UserMapper.UserDtoToUser(User)));
+                .save(UserMapper.UserDtoToUser(user)));
     }
 
     @Override
@@ -88,6 +95,9 @@ public class UserServiceJPA implements UserService {
             }
             if (StringUtils.hasText(User.getEmail())){
                 foundUser.setEmail(User.getEmail());
+            }
+            if (StringUtils.hasText(User.getFullName())){
+                foundUser.setFullName(User.getFullName());
             }
             atomicReference.set(Optional.of(UserMapper
                     .UserToUserDto(UserRepository.save(foundUser))));
