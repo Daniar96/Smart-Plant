@@ -9,7 +9,10 @@
     gap: 1rem;
     .info {
       border-radius: 0 0 5px 5px;
-      background-image: linear-gradient(to bottom, #bed2f6, #cfdef3);
+      background-image: linear-gradient(to bottom, #b8cef6, #cfdef3);
+      .plant-info-wrapper {
+        position: relative;
+      }
     }
     .plant {
       h3 {
@@ -20,9 +23,13 @@
       #plant {
         margin: 0 0.5rem 0 0.5rem;
         border-radius: 5px;
-        background-color: rgba(1, 103, 107, 0.9);
+        cursor: pointer;
+        background-color: rgba(69, 150, 217, 1);
         .img {
           padding: 0.5rem;
+          .CircularProgressbar .CircularProgressbar-text {
+            font-weight: 600;
+          }
           img {
             background-color: #e3e3e3;
             object-fit: cover;

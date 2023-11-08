@@ -7,46 +7,13 @@ Chart.register(CategoryScale);
 function ChartComponent(props) {
   Chart.defaults.font.family = "Montserrat, sans-serif";
 
-  var timeHr = [
-    "21:00",
-    "22:00",
-    "23:00",
-    "00:00",
-    "01:00",
-    "02:00",
-    "03:00",
-    "04:00",
-    "05:00",
-    "06:00",
-    "07:00",
-    "08:00",
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-    "Now",
-  ];
+  var timeHr = props.time;
 
-  var soil = [
-    45, 50, 48, 52, 55, 60, 62, 65, 68, 70, 72, 70, 68, 65, 62, 60, 58, 56, 55,
-    54, 52, 50, 48,
-  ];
+  var soil = props.soil;
 
-  var light = [
-    20, 30, 25, 0, 0, 0, 0, 100, 150, 200, 250, 260, 280, 300, 310, 315, 300,
-    250, 200, 150, 0, 0, 50,
-  ];
+  var light = props.light;
 
-  const temperature = [
-    20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 29, 28, 27, 26, 25, 24, 23, 22, 21,
-    20, 20, 21, 22,
-  ];
+  const temperature = props.temperature;
 
   const options = {
     scales: {
@@ -82,9 +49,9 @@ function ChartComponent(props) {
       },
       {
         data: light,
-        borderColor: "#5bc328",
-        pointBackgroundColor: "#5bc328",
-        backgroundColor: "rgb(91, 195, 40, 0.25)",
+        borderColor: "rgb(3, 79, 132, 0.7)",
+        pointBackgroundColor: "rgb(3, 79, 132, 0.7)",
+        backgroundColor: "rgb(3, 79, 132, 0.25)",
         fill: true,
       },
       {

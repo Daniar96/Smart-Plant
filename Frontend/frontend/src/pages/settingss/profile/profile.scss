@@ -1,0 +1,139 @@
+.profile {
+  height: 100%;
+  background-color: var(---whiteColor);
+
+  #submitbtn {
+    margin-top: 1rem;
+    padding: 0.9rem;
+    border-radius: 8px;
+    width: 170px;
+    background-color: #1c6961;
+    color: white;
+  }
+
+  .avatar {
+    padding-top: 0.5rem;
+    margin-left: 2rem;
+    .AvatarRoot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      overflow: hidden;
+      user-select: none;
+      width: 150px;
+      height: 150px;
+      border-radius: 100%;
+    }
+    .AvatarFallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #034f84;
+      color: white;
+      font-size: 50px;
+      text-transform: uppercase;
+      line-height: 1;
+      font-weight: 500;
+    }
+    .btn-up {
+      margin-left: 3rem;
+      padding: 0.9rem 0.7rem;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #24527a;
+      color: white;
+    }
+    .btn-de {
+      margin-left: 1rem;
+      padding: 0.9rem 0.7rem;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #606060;
+      color: white;
+    }
+  }
+
+  .inform {
+    margin-left: 4rem;
+    margin-top: 1rem;
+    .formIn {
+      flex-wrap: wrap;
+      column-gap: 2rem;
+      row-gap: 2rem;
+      .submitbtn {
+        flex: 1 0 100%;
+        cursor: pointer;
+      }
+      input,
+      textarea,
+      button {
+        all: unset;
+        box-sizing: border-box;
+      }
+
+      .FormRoot {
+        width: 100%;
+        display: grid;
+        column-gap: 1.5rem;
+        row-gap: 1.2rem;
+        margin-right: 1rem;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .FormField {
+        display: grid;
+      }
+
+      .FormLabel {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 35px;
+        color: #484848;
+      }
+
+      .FormMessage {
+        font-size: 13px;
+        color: #6e6e6e;
+        opacity: 0.8;
+      }
+      .Input {
+        width: 260px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        font-size: 16px;
+        color: #484848;
+        background-color: #eeeeee;
+        box-shadow: 0 0 0 1px var(--black-a9);
+      }
+      .Input:hover,
+      .Textarea:hover {
+        box-shadow: 0 0 0 1px black;
+      }
+      .Input:focus,
+      .Textarea:focus {
+        box-shadow: 0 0 0 2px black;
+      }
+      .Input::selection,
+      .Textarea::selection {
+        background-color: #2a2a2a;
+        color: #2a2a2a;
+      }
+
+      .Input {
+        padding: 0 10px;
+        height: 35px;
+        line-height: 1;
+      }
+
+      .Textarea {
+        resize: none;
+        padding: 10px;
+      }
+    }
+  }
+}

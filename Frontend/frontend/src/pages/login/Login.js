@@ -11,8 +11,13 @@ const Login = () => {
   const navigate = useNavigate();
   const [loginInfo, setLoginInfo] = useState({ userName: "", password: "" });
   const [error, setError] = useState(null);
-  const { setUserName } = useUserContext();
-  const [success, setSuccess] = useState(false);
+  const { user, setUserData } = useUserContext();
+  let hasFetchedUserID = false;
+  let hasFetchedUserInfo = false;
+
+  useEffect(() => {
+    localStorage.setItem("userData", JSON.stringify(user));
+  }, [user]);
 
   const recordData = (event) => {
     const { name, value } = event.target;
@@ -22,24 +27,104 @@ const Login = () => {
     });
   };
 
+  useEffect(() => {
+    if (user.token && !hasFetchedUserID) {
+      getUserID();
+      hasFetchedUserID = true;
+    }
+  }, [user.token]);
+
+  useEffect(() => {
+    if (user.userID && !hasFetchedUserInfo) {
+      getUserInfo();
+      hasFetchedUserID = true;
+    }
+  }, [user.userID]);
+
+  const getUserInfo = async () => {
+    fetch(`http://3.124.188.58/api/user/${user.userID}`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.text();
+        }
+      })
+      .then((data) => {
+        let email, username, fullname;
+        if (data) {
+          const object = JSON.parse(data);
+          email = object.email;
+          username = object.username;
+          fullname = object.fullName;
+        }
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          email: email,
+          userName: username,
+          fullName: fullname,
+        }));
+      });
+  };
+
+  const getUserID = async () => {
+    fetch("http://3.124.188.58/api/user", {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.text();
+        }
+      })
+      .then((data) => {
+        let userID;
+        if (data) {
+          userID = data.replace(/"/g, "");
+        }
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          userID: userID,
+        }));
+      });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setSuccess(true);
+    const username = loginInfo.userName;
+    const password = loginInfo.password;
+    const base64Credentials = btoa(username + ":" + password);
+
     try {
-      const response = await axios.get("/api/user");
-      console.log(response.data);
-      setUserName("Kazi00");
-    } catch (err) {
+      const response = await axios.post("/login", null, {
+        headers: {
+          Authorization: "Basic " + base64Credentials,
+        },
+      });
+
+      if (response.status === 200) {
+        const token = response.data;
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          token: token,
+        }));
+        setTimeout(() => navigate("/dashboard"), 500);
+      } else {
+        setError("Login failed with status code: 401");
+        setTimeout(() => setError(null), 5000);
+      }
+    } catch (error) {
       setError("Login failed with status code: 401");
       setTimeout(() => setError(null), 5000);
     }
   };
 
-  useEffect(() => {
-    if (success) {
-      navigate("/dashboard");
-    }
-  }, [success, navigate]);
+  const handleSingUp = () => {
+    navigate("/signup");
+  };
 
   return (
     <section className="loginScreen flex">
@@ -83,7 +168,7 @@ const Login = () => {
             </div>
           </div>
           <h2 className="alt">OR</h2>
-          <form id="form" action="" onSubmit={handleSubmit} method="">
+          <form id="form-login" action="" onSubmit={handleSubmit} method="">
             <div className="input-field">
               <div className="input">
                 <input
@@ -108,9 +193,13 @@ const Login = () => {
                 />
               </div>
               <span>Forgot Password?</span>
+
               <button type="submit" className="btn flex">
                 Login
               </button>
+              <h3>
+                Don't have an account? <a onClick={handleSingUp}>Sign Up</a>
+              </h3>
             </div>
           </form>
         </div>

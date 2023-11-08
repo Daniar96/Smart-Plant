@@ -28,10 +28,13 @@
           color: #dc2f2f;
         }
       }
+      .read {
+        visibility: hidden;
+      }
       .envelope {
         font-size: 2rem;
         padding-left: 0.4rem;
-        color: #118a7e;
+        color: #21bf73;
       }
       .senderInfo {
         span {
@@ -44,10 +47,10 @@
     }
     .infoText {
       margin-top: 0.8rem;
+      padding-left: 1.8rem;
       span {
         font-size: 0.9rem;
         font-weight: 500;
-        padding-left: 1.8rem;
       }
     }
   }

@@ -3,7 +3,7 @@
   border-radius: 0 0 5px 5px;
   .head {
     font-size: 0.7rem;
-    color: #f4991a !important;
+    color: #393e46 !important;
     margin-bottom: 0.3rem;
   }
   .wateringSection {
@@ -14,9 +14,11 @@
       width: 30%;
       display: flex;
       align-items: center;
+      justify-content: center;
       margin-top: 0.4rem;
       button {
         width: 100%;
+        text-align: center;
         border-radius: 10px;
         background-color: #24527a;
         font-size: 0.8rem;
@@ -28,7 +30,7 @@
         margin-right: 0.3rem;
         border: none;
         &:hover {
-          background-color: #2772db;
+          background-color: #2b4353;
         }
       }
     }
@@ -37,19 +39,22 @@
       margin: 0.5rem 0 0 0rem;
       position: relative;
       border-radius: 5px;
-      padding: 0.4rem;
+      padding: 0 0 0 0.4rem;
       overflow: hidden;
       background-color: rgba(155, 166, 165, 0.5);
       select {
         -webkit-appearance: initial;
         background-color: rgba(155, 166, 165, 0.01);
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         font-weight: 500;
+        width: 100%;
+        height: 100%;
         margin-right: 0.4rem;
         color: rgba(34, 40, 49, 0.7);
         outline: none;
         border: none;
       }
+
       .select-icon {
         position: absolute;
         top: 50%;
@@ -74,6 +79,7 @@
         background-color: rgba(155, 166, 165, 0.5);
         outline: none;
         border: none;
+        font-size: 0.9rem;
         width: 100%;
         -webkit-appearance: none;
         -moz-appearance: textfield;

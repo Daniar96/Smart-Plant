@@ -1,0 +1,29 @@
+.navigation {
+  width: 250px;
+  .navigation-container {
+    display: flex;
+    background-color: var(---whiteColor);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    flex-direction: column;
+    row-gap: 0.5rem;
+    .options {
+      display: flex;
+      cursor: pointer;
+      column-gap: 0.5rem;
+      padding: 12px 0 12px 2rem;
+      background-color: rgba(250, 247, 247, 0.3);
+      span {
+        font-size: 1.3rem;
+        color: #4596d9;
+      }
+      .icons {
+        font-size: 1.5rem;
+        color: black;
+      }
+    }
+    &:last-child {
+      padding-bottom: 3rem;
+    }
+  }
+}

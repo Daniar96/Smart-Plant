@@ -11,20 +11,36 @@
     cursor: pointer;
   }
 
+  .active:not(:last-child) {
+    position: relative;
+    background-color: #f0f2f5;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      bottom: 0;
+      right: 0;
+      width: 3.5px;
+      border-radius: 5px;
+      height: 35px;
+      background-color: #4596d9;
+    }
+  }
+
   .custom {
     width: 100%;
     padding: 12px 0;
     font-size: 1.5rem;
-    background-color: rgba(250, 247, 247, 0.3);
     &:not(:last-child):hover {
-      color: indigo;
+      color: #2b4353;
       transform: scale(1.05);
       will-change: transform;
       span {
-        color: indigo;
+        color: #2b4353;
       }
       :hover {
-        color: indigo;
+        color: #2b4353;
         transform: scale(1.05);
         will-change: transform;
       }

@@ -1,0 +1,49 @@
+.GdprContainer {
+  margin-left: 1rem;
+  display: flex;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+  border-radius: 5px;
+
+  .text {
+    margin-left: 0.8rem;
+    span {
+      a {
+        color: #4596d9;
+        cursor: pointer;
+      }
+    }
+  }
+
+  button {
+    all: unset;
+  }
+
+  .CheckboxRoot {
+    background-color: #7b7b7b;
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+  .CheckboxRoot:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .CheckboxRoot:focus {
+    box-shadow: 0 0 0 2px black;
+  }
+
+  .CheckboxIndicator {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .Label {
+    color: black;
+    padding-left: 15px;
+    font-size: 15px;
+    line-height: 1;
+  }
+}

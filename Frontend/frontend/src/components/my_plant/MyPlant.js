@@ -2,10 +2,19 @@ import React, { useEffect, useState } from "react";
 import "./myPlant.scss";
 import { IoLocationSharp } from "react-icons/io5";
 import Aos from "aos";
+import { useUserContext } from "../../components/context/UserContext";
 import "aos/dist/aos.css";
-import Plant from "./Plant";
+import PlantDialog from "./PlantDialog";
+import { update } from "lodash";
 
-const MyPlant = () => {
+const MyPlant = (props) => {
+  const { user, setUserData } = useUserContext();
+
+  const { img, plantName, age, condition, place, mode, threshold, update } =
+    props;
+
+  const [updatedName, setUpdatedName] = useState("");
+
   useEffect(() => {
     Aos.init({ duration: 800 });
   }, []);
@@ -49,12 +58,28 @@ const MyPlant = () => {
       .catch();
   }, [location]);
 
+  const updatePlantInfo = (name) => {
+    setUpdatedName(name);
+  };
+
   return (
     <div className="myPlant">
       <div className="infoContainer">
         <div data-aos="fade-down" className="plant info">
           <h3>Your Plant</h3>
-          <Plant img="sunflower" name="Sunflower" age="8" growth="48" />
+          <div className="plant-info-wrapper">
+            <PlantDialog
+              img={img}
+              changeName={updatePlantInfo}
+              name={updatedName ? updatedName : plantName}
+              age={age}
+              condition={condition}
+              place={place}
+              mode={mode}
+              threshold={threshold}
+              update={update}
+            />
+          </div>
         </div>
         <div data-aos="fade-down" className="temperature info">
           <div className="weather">
@@ -71,7 +96,7 @@ const MyPlant = () => {
                 src={
                   tem.weatherDescription.includes("rain")
                     ? "/assets/img/rain.png"
-                    : "/assets/img/sun.png"
+                    : "/assets/img/overcast.png"
                 }
                 alt="Weather Image"
               />
