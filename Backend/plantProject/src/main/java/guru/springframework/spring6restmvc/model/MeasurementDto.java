@@ -4,7 +4,6 @@ import guru.springframework.spring6restmvc.entities.Plant;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Data;
 
@@ -27,6 +26,8 @@ public class MeasurementDto {
 
     private Float uv;
 
+    private Plant plant;
 
+    private Float water;
 
 }

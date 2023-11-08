@@ -35,6 +35,8 @@ public class User {
 
     private Boolean admin;
 
+    private String fullName;
+
     @CreationTimestamp
     private LocalDateTime createDate;
 
@@ -44,5 +46,9 @@ public class User {
             joinColumns = @JoinColumn(name = "plantId"),
             inverseJoinColumns = @JoinColumn(name = "userId"))
     private Set<Plant> plants = new HashSet<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private Set<Notification> notifications = new HashSet<>();
 
 }

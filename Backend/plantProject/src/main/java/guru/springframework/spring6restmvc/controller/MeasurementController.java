@@ -1,9 +1,13 @@
 package guru.springframework.spring6restmvc.controller;
 
-import guru.springframework.spring6restmvc.services.MeasurementService;
+import guru.springframework.spring6restmvc.entities.Plant;
+import guru.springframework.spring6restmvc.mappers.PlantMapper;
 import guru.springframework.spring6restmvc.model.MeasurementDto;
+import guru.springframework.spring6restmvc.model.PlantDto;
+import guru.springframework.spring6restmvc.services.MeasurementService;
+import guru.springframework.spring6restmvc.services.PlantService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,30 +23,35 @@ import java.util.UUID;
 public class MeasurementController {
 
     private final MeasurementService measurementService;
+    private final PlantService plantService;
+
+    private final PlantMapper plantMapper;
+
 
     @GetMapping
-    public List<MeasurementDto> listPlants(){
+    public List<MeasurementDto> listMeasurements(){
+
         return measurementService.listAllMeasurements();
     }
 
-    @GetMapping(value = "{measurementId}")
-    public Optional<MeasurementDto> getPlantById(@PathVariable("measurementId") UUID measurementId){
+    @GetMapping(value = "{plantId}")
+    public Page<MeasurementDto> getMeasurementByPlant(@PathVariable("plantId") UUID plantId, @RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) Integer pageSize){
+        Optional<PlantDto> plantOptional = plantService.getPlantById(plantId);
+        if (plantOptional.isEmpty()){
+            return null;
+        }
+        Plant plant = plantMapper.plantDtoToPlant(plantOptional.get());
+
+        return measurementService.listAllMeasurementsByPlant(plant, pageNumber, pageSize);
+    }
+    @GetMapping(value = "getById/{measurementId}")
+    public Optional<MeasurementDto> getMeasurementById(@PathVariable("measurementId") UUID measurementId){
         return measurementService.getMeasurementById(measurementId);
     }
 
-    @PostMapping
-    public ResponseEntity handlePost(@RequestBody MeasurementDto plant){
-
-        MeasurementDto savedPlant = measurementService.saveNewMeasurement(plant);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/plant/" + savedPlant.getMeasurementId().toString());
-
-        return new ResponseEntity(headers, HttpStatus.CREATED);
-    }
 
     @PatchMapping("{measurementId}")
-    public ResponseEntity updateBeerPatchById(@PathVariable("measurementId") UUID measurementId, @RequestBody MeasurementDto plant){
+    public ResponseEntity patchMeasurementById(@PathVariable("measurementId") UUID measurementId, @RequestBody MeasurementDto plant){
 
         measurementService.patchMeasurementById(measurementId, plant);
 
