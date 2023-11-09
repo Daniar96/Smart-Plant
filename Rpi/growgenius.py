@@ -12,12 +12,18 @@ import socketserver
 from time import sleep
 import json
 
-from Rpi.constants import path
-from Rpi.constants.pin_assignment import valve_output_pin, water_level_input_pin
-from Rpi.constants.properties import *
+from constants import path
+from constants.pin_assignment import valve_output_pin, water_level_input_pin
+from constants.properties import *
 
-water_lock = threading.Lock()
-current_water_level = 0
+# Constants
+max_watering_duration = 20
+# Min and max constants used for calibration of the humidity sensor after measuring different circumstances.
+min_voltage_const_light = 0.004  # When the sensor is held against a flashlight, this number is maximum I measured
+max_voltage_const_light = 3.3  # When the sensor is held in deep dark, in a hand, in a dark room, this number is the maximum I measured
+# Min and max constants used for calibration of the humidity sensor after measuring different circumstances.
+min_voltage_const_humid = 0.955  # When the sensor is held in water, this number is the average
+max_voltage_const_humid = 2.505  # When the sensor is held in the air, this number is the average
 
 
 def calculateLight(channel):
@@ -63,6 +69,10 @@ def calculateWater():
 
     water_lock.release()
     return water_percentage
+    # water_lock.acquire()
+    # sensor_value = GPIO.input(water_level_input_pin)
+    # water_lock.release()
+    # return sensor_value
 
 
 def release_water(seconds):
@@ -75,8 +85,13 @@ def release_water(seconds):
     GPIO.output(valve_output_pin, GPIO.HIGH)
     sleep(seconds)
     GPIO.output(valve_output_pin, GPIO.LOW)
-
     return
+    # water_lock.acquire()
+    # GPIO.output(valve_output_pin, GPIO.HIGH)
+    # sleep(seconds)
+    # GPIO.output(valve_output_pin, GPIO.LOW)
+    # water_lock.release()
+    # return
 
 
 def setup_sensors():
@@ -87,9 +102,9 @@ def setup_sensors():
     ads = ADS.ADS1115(i2c)
 
     # Create single-ended input on channels
-    chan0 = AnalogIn(ads, ADS.P0)
+    chan0 = AnalogIn(ads, ADS.P2)
     chan1 = AnalogIn(ads, ADS.P1)
-    chan2 = AnalogIn(ads, ADS.P2)
+    chan2 = AnalogIn(ads, ADS.P0)
 
     # Set the GPIO mode
     GPIO.setmode(GPIO.BCM)
@@ -99,41 +114,44 @@ def setup_sensors():
     GPIO.setup(water_level_input_pin, GPIO.OUT)
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(valve_output_pin, GPIO.OUT)
+    GPIO.output(valve_output_pin, GPIO.LOW)
     return chan0, chan1, chan2
 
 
 def send_measurements(plant_id, temp_chan, humid_chan, light_chan):
-    # while True:
-    temperature = calculateTemp(temp_chan)
-    humidity = calculateHumid(humid_chan)
-    uv_measurement = calculateLight(light_chan)
-    water_tank = calculateWater()
+    while True:
+        temperature = calculateTemp(temp_chan)
+        humidity = calculateHumid(humid_chan)
+        uv_measurement = calculateLight(light_chan)
+        water_tank = calculateWater()
 
-    t = f"{temperature:.2f}"
-    h = f"{humidity:.2f}"
-    uv = f"{uv_measurement:.2f}"
-    water = f"{water_tank:.2f}"
+        t = f"{temperature:.2f}"
+        h = f"{humidity:.2f}"
+        uv = f"{uv_measurement:.2f}"
+        water = f"{water_tank:.2f}"
 
-    print(f"Humidity= {h}%")
-    print(f"Temperature= {t}°C")
-    print(f"UV= {uv}°%")
-    print(f"Water level= {water}°%")
+        print(f"Humidity= {h}%")
+        print(f"Temperature= {t}°C")
+        print(f"UV= {uv}°%")
+        print(f"Water level= {water}°%")
 
-    data = {"temperature": t, "humidity": h, "uv": uv, "water_tank": water_tank}
-    # data = {"humidity": h, "uv": uv, "temp": t}
+        data = {"temp": t, "humidity": h, "uv": uv, "water": water}
+        # data = {"humidity": h, "uv": uv, "temp": t}
 
-    headers = {
-        "Content-Type": "application/json"
-    }
+        headers = {
+            "Content-Type": "application/json"
+        }
 
-    request_url = path.URL + plant_id
-    try:
-        r = requests.post(url=request_url, headers=headers, json=data, cookies=path.credentials, verify=False)
-        response = r.status_code
-        print(response)
-    except Exception as e:
-        print(e)
-    sleep(20)
+        request_url = path.URL + plant_id
+        try:
+            r = requests.post(url=request_url, headers=headers, json=data, cookies=path.credentials, verify=False)
+            response = r.status_code
+            print(response)
+        except Exception as e:
+            print(e)
+            pass
+        # ---------------------------------------------------------
+        sleep(8)
 
 
 def getPlantID():
@@ -152,20 +170,32 @@ def getPlantID():
 
 
 class MyHandler(http.server.SimpleHTTPRequestHandler):
-    def do_GET(self):
 
+    def do_POST(self):
         try:
             content_length = int(self.headers['Content-Length'])
-
             body = self.rfile.read(content_length)
             json_data = json.loads(body)
+            print(json_data)
             # process the JSON data as needed
-            release_water(min(max_watering_duration, json_data["duration"]))
+            duration = float(json_data["duration"])
+            release_water(min(max_watering_duration, duration))
             self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')  # Allow requests from all origins
+            self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+            self.send_header('Access-Control-Allow-Headers', 'Content-Type')
             self.end_headers()
+            json_data = {"duration": min(max_watering_duration, duration)}
+            self.wfile.write(str(json_data).encode('utf-8'))
             return
-        except:
+        except Exception as e:
+            print(e)
+            print()
             self.send_response(400)
+            self.send_header('Access-Control-Allow-Origin', '*')  # Allow requests from all origins
+            self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+            self.send_header('Access-Control-Allow-Headers', 'Content-Type')
             self.end_headers()
             return
 
@@ -178,19 +208,27 @@ def run_http_client():
         httpd.serve_forever()
 
 
+def start_server():
+    try:
+        run_http_client()
+    except KeyboardInterrupt:
+        pass
+
+
 if __name__ == "__main__":
+    water_lock = threading.Lock()
+    current_water_level = 0
 
     plant_id = getPlantID()
     temp_chan, humid_chan, light_chan = setup_sensors()
 
-    # Start the HTTP client in a separate thread
-    http_thread = threading.Thread(target=run_http_client)
-    try:
-        send_measurements(plant_id, temp_chan, humid_chan, light_chan)
-        http_thread.start()
-        http_thread.join()
-        GPIO.cleanup()
-    finally:
-        GPIO.cleanup()  # Clean up
-        water_lock.release()
-        http_thread.join(timeout=1)
+    # Start the HTTP server in a separate thread
+    http_thread = threading.Thread(target=start_server)
+    http_thread.start()
+
+    send_measurements(plant_id, temp_chan, humid_chan, light_chan)
+
+    # Perform cleanup after threads finish
+    http_thread.join()
+    GPIO.cleanup()  # Clean up GPIO
+    print("Shutdown")
